@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Stella — Ristorante Italiano München</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,300;0,6..96,400;1,6..96,300;1,6..96,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C49A3C;
+  --gold2: #E0B84A;
+  --dark: #070605;
+  --surface: #0D0B08;
+  --card: #131008;
+  --cream: #F2EAD5;
+  --muted: #695E4C;
+  --border: rgba(196,154,60,0.16);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--dark);color:var(--cream);font-family:'Jost',sans-serif;font-weight:300;overflow-x:hidden;cursor:none;}
+
+/* CURSOR */
+#c1,#c2{position:fixed;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+#c1{width:6px;height:6px;background:var(--gold);}
+#c2{width:36px;height:36px;border:1px solid rgba(196,154,60,0.4);transition:width .3s,height .3s,border-color .3s;}
+@media(hover:none){#c1,#c2{display:none}body,a,button,input,select,textarea{cursor:auto}}
+
+/* LOADER */
+#loader{position:fixed;inset:0;z-index:8000;background:var(--dark);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;transition:opacity .9s,visibility .9s;}
+#loader.out{opacity:0;visibility:hidden;}
+.l-logo{font-family:'Bodoni Moda',serif;font-size:2.2rem;letter-spacing:.2em;color:var(--gold);}
+.l-bar{width:160px;height:1px;background:rgba(196,154,60,.15);overflow:hidden;}
+.l-fill{height:100%;width:0;background:var(--gold);animation:lf 1.6s ease forwards;}
+@keyframes lf{to{width:100%}}
+
+/* NAV */
+#nav{position:fixed;inset:0 0 auto;z-index:500;height:70px;padding:0 56px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid transparent;transition:background .5s,border-color .5s,backdrop-filter .5s;}
+#nav.s{background:rgba(7,6,5,.9);backdrop-filter:blur(20px);border-color:var(--border);}
+.n-logo{font-family:'Bodoni Moda',serif;font-size:1.3rem;color:var(--gold);text-decoration:none;letter-spacing:.12em;display:flex;align-items:center;gap:10px;}
+.n-star{display:inline-block;font-size:.65rem;animation:spin 14s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.n-links{display:flex;align-items:center;gap:2px;list-style:none;}
+.n-links button{background:none;border:none;color:rgba(242,234,213,.45);font-family:'Jost',sans-serif;font-size:.71rem;font-weight:400;letter-spacing:.16em;text-transform:uppercase;padding:8px 15px;transition:color .3s;position:relative;}
+.n-links button:hover{color:var(--cream);}
+.n-links button::after{content:'';position:absolute;bottom:4px;left:15px;right:15px;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .3s;}
+.n-links button:hover::after{transform:scaleX(1);}
+.n-cta{background:var(--gold)!important;color:var(--dark)!important;border-radius:2px!important;font-weight:500!important;padding:9px 20px!important;margin-left:6px;transition:background .3s,transform .2s!important;}
+.n-cta:hover{background:var(--gold2)!important;transform:translateY(-1px)!important;}
+.n-cta::after{display:none!important;}
+
+/* HERO */
+#hero{height:100vh;min-height:680px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-img{position:absolute;inset:0;}
+.hero-img img{width:100%;height:100%;object-fit:cover;transform:scale(1.15);transition:transform .1s linear;filter:brightness(.45)saturate(.75);}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,6,5,.25) 0%,rgba(7,6,5,.5) 60%,rgba(7,6,5,.95) 100%);}
+
+.hero-content{position:relative;z-index:2;text-align:center;padding:0 24px;}
+.h-pre{font-size:.67rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:28px;opacity:0;animation:up 1s 1.7s both;}
+.h-pre::before,.h-pre::after{content:'';width:32px;height:1px;background:var(--gold);}
+.h-title{font-family:'Bodoni Moda',serif;font-size:clamp(5.5rem,14vw,13rem);line-height:.88;opacity:0;animation:up 1.2s 1.85s both;}
+.h-title span{display:block;color:var(--cream);}
+.h-title em{display:block;font-style:italic;color:var(--gold2);}
+.h-sub{font-family:'Bodoni Moda',serif;font-style:italic;font-size:1.1rem;color:rgba(242,234,213,.4);margin:20px 0 48px;opacity:0;animation:up .9s 2.05s both;}
+.h-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;opacity:0;animation:up .9s 2.2s both;}
+.h-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;opacity:0;animation:up .9s 2.5s both;}
+.h-scroll span{font-size:.59rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);}
+.s-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--gold),transparent);animation:sp 2s ease-in-out infinite;}
+@keyframes sp{0%,100%{opacity:.2;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+@keyframes up{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+/* BTNS */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 38px;font-family:'Jost',sans-serif;font-size:.76rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;transition:all .3s;border-radius:1px;}
+.btn-g{background:var(--gold);color:var(--dark);border:1px solid var(--gold);}
+.btn-g:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 14px 36px rgba(196,154,60,.18);}
+.btn-o{background:transparent;color:var(--cream);border:1px solid rgba(242,234,213,.2);}
+.btn-o:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px);}
+
+/* MARQUEE */
+.mstrip{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:17px 0;overflow:hidden;background:var(--surface);}
+.mtrack{display:flex;gap:52px;width:max-content;animation:mq 28s linear infinite;}
+.mitem{display:flex;align-items:center;gap:10px;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.mitem b{color:var(--gold);font-weight:400;}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* SECTIONS */
+.sec{padding:116px 56px;}
+.s-label{font-size:.67rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.s-label::before{content:'';width:26px;height:1px;background:var(--gold);}
+.s-title{font-family:'Bodoni Moda',serif;font-size:clamp(2.3rem,4vw,3.6rem);line-height:1.08;color:var(--cream);}
+.s-title em{font-style:italic;color:var(--gold2);}
+
+/* ABOUT */
+#about{background:var(--surface);}
+.a-wrap{max-width:1220px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:center;}
+.a-body{color:var(--muted);line-height:1.95;font-size:.92rem;margin:20px 0;}
+.a-rule{width:40px;height:1px;background:var(--gold);opacity:.3;margin:28px 0;}
+.stats{display:flex;gap:44px;}
+.sn{font-family:'Bodoni Moda',serif;font-size:2.9rem;background:linear-gradient(135deg,var(--gold),var(--gold2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
+.sl{font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:5px;}
+
+/* ABOUT IMAGES — parallax zoom grid */
+.a-imgs{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:300px 200px;gap:8px;}
+.aimg{overflow:hidden;position:relative;}
+.aimg:first-child{grid-column:1/3;}
+.aimg img{width:100%;height:100%;object-fit:cover;filter:brightness(.8)saturate(.85);transition:transform .1s linear;}
+.aimg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(7,6,5,.55));pointer-events:none;}
+
+/* PARALLAX BREAK — full width image with zoom on scroll */
+.pbreak{position:relative;height:65vh;min-height:420px;overflow:hidden;}
+.pbreak-img{position:absolute;inset:-15%;width:130%;height:130%;object-fit:cover;filter:brightness(.45)saturate(.75);transition:transform .05s linear;}
+.pbreak-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(7,6,5,.35);}
+.pbreak-quote{font-family:'Bodoni Moda',serif;font-style:italic;font-size:clamp(2rem,4.5vw,4.5rem);color:rgba(242,234,213,.85);text-align:center;padding:0 52px;line-height:1.2;}
+
+/* MENU */
+#menu{background:var(--dark);}
+.m-wrap{max-width:1220px;margin:0 auto;}
+.m-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:20px;}
+.tabs{display:flex;gap:2px;}
+.tab{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Jost',sans-serif;font-size:.71rem;font-weight:400;letter-spacing:.13em;text-transform:uppercase;padding:10px 20px;transition:all .25s;}
+.tab:hover{color:var(--cream);border-color:rgba(196,154,60,.35);}
+.tab.on{background:var(--gold);color:var(--dark);border-color:var(--gold);font-weight:500;}
+.mpanel{display:none;}
+.mpanel.on{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);}
+.mrow{background:var(--surface);padding:22px 26px;display:flex;justify-content:space-between;align-items:center;gap:18px;transition:background .25s;position:relative;overflow:hidden;}
+.mrow::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);transform:scaleY(0);transform-origin:bottom;transition:transform .3s;}
+.mrow:hover{background:var(--card);}
+.mrow:hover::before{transform:scaleY(1);}
+.mn{font-size:.89rem;color:var(--cream);margin-bottom:4px;}
+.md{font-family:'Bodoni Moda',serif;font-style:italic;font-size:.77rem;color:var(--muted);}
+.mp{font-family:'Bodoni Moda',serif;font-size:1.1rem;color:var(--gold);white-space:nowrap;transition:color .25s;}
+.mrow:hover .mp{color:var(--gold2);}
+
+/* GALLERY */
+#gallery{background:var(--surface);padding:100px 0;}
+.g-head{padding:0 56px 52px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;}
+.g-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:280px 220px;gap:6px;padding:0 56px;}
+.gi{overflow:hidden;position:relative;}
+.gi img{width:100%;height:100%;object-fit:cover;filter:brightness(.75)saturate(.85);transition:transform .7s ease,filter .5s;}
+.gi:hover img{transform:scale(1.07);filter:brightness(.9)saturate(1.05);}
+.gi-lbl{position:absolute;bottom:14px;left:18px;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(242,234,213,.6);opacity:0;transition:opacity .3s;}
+.gi:hover .gi-lbl{opacity:1;}
+/* Grid layout */
+.gi:nth-child(1){grid-column:1/6;grid-row:1;}
+.gi:nth-child(2){grid-column:6/9;grid-row:1;}
+.gi:nth-child(3){grid-column:9/13;grid-row:1;}
+.gi:nth-child(4){grid-column:1/5;grid-row:2;}
+.gi:nth-child(5){grid-column:5/9;grid-row:2;}
+.gi:nth-child(6){grid-column:9/13;grid-row:2;}
+
+/* RESERVATION */
+#res{background:var(--dark);}
+.r-wrap{max-width:1220px;margin:0 auto;display:grid;grid-template-columns:1fr 1.45fr;gap:80px;}
+.r-img{position:relative;overflow:hidden;}
+.r-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.55)saturate(.75);}
+.r-img::after{content:'"Ogni pasto\nè un ricordo"';white-space:pre;font-family:'Bodoni Moda',serif;font-style:italic;font-size:1.6rem;color:rgba(242,234,213,.75);position:absolute;bottom:28px;left:24px;line-height:1.5;}
+.rform{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.ff{display:flex;flex-direction:column;gap:6px;}
+.ff.full{grid-column:1/3;}
+.ff label{font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);}
+.ff input,.ff select,.ff textarea{background:rgba(255,255,255,.03);border:1px solid rgba(196,154,60,.18);color:var(--cream);padding:13px 15px;font-family:'Jost',sans-serif;font-size:.87rem;outline:none;resize:none;border-radius:1px;transition:border-color .3s,background .3s;appearance:none;}
+.ff input:focus,.ff select:focus,.ff textarea:focus{border-color:var(--gold);background:rgba(196,154,60,.04);}
+.ff input::placeholder,.ff textarea::placeholder{color:rgba(105,94,76,.4);}
+.ff select option{background:#131008;color:var(--cream);}
+.fmsg{display:none;padding:13px 16px;margin-top:4px;font-size:.82rem;border-radius:1px;}
+.fmsg.ok{display:block;background:rgba(196,154,60,.1);border:1px solid rgba(196,154,60,.28);color:var(--gold2);}
+.fmsg.err{display:block;background:rgba(220,70,70,.07);border:1px solid rgba(220,70,70,.2);color:#f99;}
+
+/* CONTACT */
+#contact{background:var(--surface);}
+.c-wrap{max-width:1220px;margin:0 auto;}
+.c-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-top:52px;}
+.cc{background:var(--dark);padding:34px 26px;transition:background .25s;}
+.cc:hover{background:var(--card);}
+.cc-lbl{font-size:.63rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:13px;}
+.cc-val{color:var(--muted);font-size:.86rem;line-height:1.9;}
+
+/* FOOTER */
+footer{background:var(--surface);border-top:1px solid var(--border);padding:30px 56px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+.f-logo{font-family:'Bodoni Moda',serif;font-size:1.15rem;color:var(--gold);letter-spacing:.1em;}
+.f-copy{font-size:.68rem;color:var(--muted);}
+
+/* REVEAL */
+.r{opacity:0;transform:translateY(24px);transition:opacity .85s ease,transform .85s ease;}
+.r.in{opacity:1;transform:translateY(0);}
+.r[data-d="1"]{transition-delay:.1s}.r[data-d="2"]{transition-delay:.2s}.r[data-d="3"]{transition-delay:.3s}.r[data-d="4"]{transition-delay:.4s}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  #nav{padding:0 20px}.n-links{display:none}
+  .sec{padding:76px 22px}
+  .a-wrap{grid-template-columns:1fr;gap:44px}
+  .a-imgs{grid-template-rows:220px 160px}
+  .mpanel.on{grid-template-columns:1fr}
+  .m-head{flex-direction:column;align-items:flex-start}
+  .g-grid{grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,180px);padding:0 22px}
+  .gi:nth-child(1),.gi:nth-child(2),.gi:nth-child(3),.gi:nth-child(4),.gi:nth-child(5),.gi:nth-child(6){grid-column:auto;grid-row:auto}
+  .r-wrap{grid-template-columns:1fr;gap:44px}
+  .r-img{min-height:280px}
+  .c-grid{grid-template-columns:1fr 1fr}
+  footer{flex-direction:column;text-align:center;padding:24px 22px}
+  .g-head{padding:0 22px 40px}
+  #gallery{padding:76px 0}
+  .pbreak-quote{font-size:clamp(1.5rem,5vw,3rem);padding:0 24px}
+}
+</style>
+</head>
+<body>
+
+<div id="loader"><div class="l-logo">LA STELLA</div><div class="l-bar"><div class="l-fill"></div></div></div>
+<div id="c1"></div><div id="c2"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="n-logo" onclick="go('hero');return false;"><span class="n-star">✦</span> La Stella</a>
+  <ul class="n-links">
+    <li><button onclick="go('about')">Über uns</button></li>
+    <li><button onclick="go('menu')">Speisekarte</button></li>
+    <li><button onclick="go('gallery')">Galerie</button></li>
+    <li><button onclick="go('contact')">Kontakt</button></li>
+    <li><button class="n-cta" onclick="go('res')">Tisch reservieren</button></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-img">
+    <img id="heroImg" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1800&q=85&fit=crop" alt="La Stella Restaurant">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="h-pre">Seit 1987 · München · Cucina Italiana</div>
+    <h1 class="h-title"><span>La</span><em>Stella</em></h1>
+    <p class="h-sub">Dove il cibo diventa poesia</p>
+    <div class="h-btns">
+      <button class="btn btn-g" onclick="go('res')">Tisch reservieren</button>
+      <button class="btn btn-o" onclick="go('menu')">Speisekarte</button>
+    </div>
+  </div>
+  <div class="h-scroll"><div class="s-line"></div><span>Scroll</span></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mstrip">
+  <div class="mtrack">
+    <div class="mitem"><b>✦</b> Frische Pasta täglich</div>
+    <div class="mitem"><b>✦</b> Toskana Weinkeller</div>
+    <div class="mitem"><b>✦</b> Google 4.9 Sterne</div>
+    <div class="mitem"><b>✦</b> Seit 1987 München</div>
+    <div class="mitem"><b>✦</b> Live Musik Fr & Sa</div>
+    <div class="mitem"><b>✦</b> Private Dining</div>
+    <div class="mitem"><b>✦</b> Holzofen Pizza</div>
+    <div class="mitem"><b>✦</b> Frische Pasta täglich</div>
+    <div class="mitem"><b>✦</b> Toskana Weinkeller</div>
+    <div class="mitem"><b>✦</b> Google 4.9 Sterne</div>
+    <div class="mitem"><b>✦</b> Seit 1987 München</div>
+    <div class="mitem"><b>✦</b> Live Musik Fr & Sa</div>
+    <div class="mitem"><b>✦</b> Private Dining</div>
+    <div class="mitem"><b>✦</b> Holzofen Pizza</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="sec">
+  <div class="a-wrap">
+    <div>
+      <div class="s-label r">Unsere Geschichte</div>
+      <h2 class="s-title r" data-d="1">Authentische Küche,<br><em>handgemacht</em><br>mit Leidenschaft</h2>
+      <p class="a-body r" data-d="2">Seit über drei Jahrzehnten bringen wir die Aromen Süditaliens nach München. Jedes Gericht entsteht aus frischen, saisonalen Zutaten und dem Wissen von Generationen.</p>
+      <p class="a-body r" data-d="2">Unsere Pasta wird täglich frisch gezogen. Das Olivenöl kommt direkt aus der Toskana — Qualität, die man schmeckt.</p>
+      <div class="a-rule r" data-d="3"></div>
+      <div class="stats r" data-d="3">
+        <div><div class="sn" data-target="37">0</div><div class="sl">Jahre</div></div>
+        <div><div class="sn">4.9</div><div class="sl">Google ★</div></div>
+        <div><div class="sn">100%</div><div class="sl">Frisch</div></div>
+      </div>
+    </div>
+    <div class="a-imgs r" data-d="2">
+      <div class="aimg"><img class="pz" data-speed="0.04" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1000&q=80&fit=crop" alt="Fine Dining" loading="lazy"></div>
+      <div class="aimg"><img class="pz" data-speed="0.05" src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=700&q=80&fit=crop" alt="Restaurant" loading="lazy"></div>
+      <div class="aimg"><img class="pz" data-speed="0.04" src="https://images.unsplash.com/photo-1481931098730-318b6f776db0?w=700&q=80&fit=crop" alt="Pasta" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PARALLAX BREAK 1 -->
+<div class="pbreak" id="pb1">
+  <img class="pbreak-img" id="pb1img" src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1800&q=80&fit=crop" alt="Food">
+  <div class="pbreak-overlay">
+    <div class="pbreak-quote r">"Ogni pasto è un<br>ricordo da custodire"</div>
+  </div>
+</div>
+
+<!-- MENU -->
+<section id="menu" class="sec">
+  <div class="m-wrap">
+    <div class="m-head">
+      <div>
+        <div class="s-label r">Unsere Küche</div>
+        <h2 class="s-title r" data-d="1">Die <em>Speisekarte</em></h2>
+      </div>
+      <div class="tabs r" data-d="2">
+        <button class="tab on" onclick="switchTab(this,'pasta')">🍝 Pasta</button>
+        <button class="tab" onclick="switchTab(this,'pizza')">🍕 Pizza</button>
+        <button class="tab" onclick="switchTab(this,'dolci')">🍮 Dolci</button>
+      </div>
+    </div>
+    <div class="mpanel on" id="mp-pasta">
+      <div class="mrow r"><div><div class="mn">Spaghetti Carbonara</div><div class="md">Guanciale, Pecorino Romano, Eigelb</div></div><div class="mp">16,50 €</div></div>
+      <div class="mrow r" data-d="1"><div><div class="mn">Tagliatelle al Ragù</div><div class="md">Frische Pasta, Bolognese nonna</div></div><div class="mp">17,90 €</div></div>
+      <div class="mrow r" data-d="1"><div><div class="mn">Risotto al Tartufo</div><div class="md">Schwarzer Trüffel, Parmesan</div></div><div class="mp">22,50 €</div></div>
+      <div class="mrow r" data-d="2"><div><div class="mn">Pappardelle ai Funghi</div><div class="md">Waldpilze, Knoblauch, Weißwein</div></div><div class="mp">18,90 €</div></div>
+      <div class="mrow r" data-d="2"><div><div class="mn">Gnocchi al Pesto</div><div class="md">Hausgemacht, Basilikumpesto</div></div><div class="mp">15,50 €</div></div>
+      <div class="mrow r" data-d="3"><div><div class="mn">Lasagne della Casa</div><div class="md">Béchamel, Ragù, Parmesan</div></div><div class="mp">16,90 €</div></div>
+    </div>
+    <div class="mpanel" id="mp-pizza">
+      <div class="mrow r"><div><div class="mn">Margherita DOP</div><div class="md">San Marzano, Fior di Latte</div></div><div class="mp">13,50 €</div></div>
+      <div class="mrow r" data-d="1"><div><div class="mn">Diavola Piccante</div><div class="md">Salami piccante, Chili, Basilikum</div></div><div class="mp">15,50 €</div></div>
+      <div class="mrow r" data-d="1"><div><div class="mn">Tartufo Bianco</div><div class="md">Weißer Trüffel, Mozzarella, Rucola</div></div><div class="mp">24,00 €</div></div>
+      <div class="mrow r" data-d="2"><div><div class="mn">Quattro Stagioni</div><div class="md">Prosciutto, Pilze, Artischocken</div></div><div class="mp">16,90 €</div></div>
+      <div class="mrow r" data-d="2"><div><div class="mn">Prosciutto e Rucola</div><div class="md">Parmaschinken, Rucola, Parmesan</div></div><div class="mp">17,50 €</div></div>
+      <div class="mrow r" data-d="3"><div><div class="mn">Calzone Classico</div><div class="md">Ricotta, Mozzarella, Prosciutto</div></div><div class="mp">15,90 €</div></div>
+    </div>
+    <div class="mpanel" id="mp-dolci">
+      <div class="mrow r"><div><div class="mn">Tiramisù della Casa</div><div class="md">Original-Hausrezept, täglich frisch</div></div><div class="mp">8,50 €</div></div>
+      <div class="mrow r" data-d="1"><div><div class="mn">Panna Cotta Vaniglia</div><div class="md">Beerenkoulis, frische Minze</div></div><div class="mp">7,90 €</div></div>
+      <div class="mrow r" data-d="1"><div><div class="mn">Cannoli Siciliani</div><div class="md">Ricotta, Pistazien, kandierte Früchte</div></div><div class="mp">6,90 €</div></div>
+      <div class="mrow r" data-d="2"><div><div class="mn">Chianti Classico DOCG</div><div class="md">Toskana, 0,2L</div></div><div class="mp">6,80 €</div></div>
+      <div class="mrow r" data-d="2"><div><div class="mn">Barolo DOCG</div><div class="md">Piemont, 0,2L</div></div><div class="mp">9,50 €</div></div>
+      <div class="mrow r" data-d="3"><div><div class="mn">Limoncello artigianale</div><div class="md">Sorrent-Zitronen, 4cl</div></div><div class="mp">4,50 €</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="g-head">
+    <div>
+      <div class="s-label r">Einblicke</div>
+      <h2 class="s-title r" data-d="1">Unsere <em>Atmosphäre</em></h2>
+    </div>
+  </div>
+  <div class="g-grid">
+    <div class="gi r"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1000&q=80&fit=crop" loading="lazy" alt="Saal"><span class="gi-lbl">Der Saal</span></div>
+    <div class="gi r" data-d="1"><img src="https://images.unsplash.com/photo-1600891964092-4316c288032e?w=600&q=80&fit=crop" loading="lazy" alt="Gericht"><span class="gi-lbl">Unsere Gerichte</span></div>
+    <div class="gi r" data-d="2"><img src="https://images.unsplash.com/photo-1474722883778-792e7990302f?w=600&q=80&fit=crop" loading="lazy" alt="Wein"><span class="gi-lbl">Weinkeller</span></div>
+    <div class="gi r" data-d="1"><img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=700&q=80&fit=crop" loading="lazy" alt="Pasta"><span class="gi-lbl">Frische Pasta</span></div>
+    <div class="gi r" data-d="2"><img src="https://images.unsplash.com/photo-1510693206972-df098062cb71?w=700&q=80&fit=crop" loading="lazy" alt="Pizza"><span class="gi-lbl">Holzofen Pizza</span></div>
+    <div class="gi r" data-d="3"><img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=600&q=80&fit=crop" loading="lazy" alt="Dessert"><span class="gi-lbl">Dolci</span></div>
+  </div>
+</section>
+
+<!-- PARALLAX BREAK 2 -->
+<div class="pbreak" id="pb2">
+  <img class="pbreak-img" id="pb2img" src="https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=1800&q=80&fit=crop" alt="Restaurant Abend">
+  <div class="pbreak-overlay" style="background:rgba(7,6,5,.45)">
+    <div class="pbreak-quote r" style="font-size:clamp(1.6rem,3.5vw,3.2rem)">Reservieren Sie Ihren Tisch für<br>einen unvergesslichen Abend</div>
+  </div>
+</div>
+
+<!-- RESERVATION -->
+<section id="res" class="sec">
+  <div class="r-wrap">
+    <div class="r">
+      <div class="s-label">Tisch sichern</div>
+      <h2 class="s-title" style="margin-bottom:28px">Jetzt<br><em>reservieren</em></h2>
+      <div class="r-img">
+        <img src="https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?w=800&q=80&fit=crop" alt="Tisch" loading="lazy">
+      </div>
+    </div>
+    <div class="r" data-d="1">
+      <form class="rform" id="resForm" action="https://formspree.io/f/xjgadzry" method="POST">
+        <input type="hidden" name="_subject" value="🍕 Neue Reservierung — La Stella">
+        <div class="ff"><label>Vorname *</label><input type="text" name="vorname" placeholder="Marco" required></div>
+        <div class="ff"><label>Nachname *</label><input type="text" name="nachname" placeholder="Rossi" required></div>
+        <div class="ff"><label>Telefon *</label><input type="tel" name="telefon" placeholder="+49 89 123456" required></div>
+        <div class="ff"><label>E-Mail</label><input type="email" name="email" placeholder="marco@beispiel.de"></div>
+        <div class="ff"><label>Datum *</label><input type="date" name="datum" required></div>
+        <div class="ff"><label>Uhrzeit *</label>
+          <select name="uhrzeit" required>
+            <option value="" disabled selected>Wählen...</option>
+            <option>18:00 Uhr</option><option>18:30 Uhr</option><option>19:00 Uhr</option>
+            <option>19:30 Uhr</option><option>20:00 Uhr</option><option>20:30 Uhr</option>
+            <option>21:00 Uhr</option><option>21:30 Uhr</option>
+          </select>
+        </div>
+        <div class="ff"><label>Personen *</label>
+          <select name="personen" required>
+            <option value="" disabled selected>Wählen...</option>
+            <option>1 Person</option><option>2 Personen</option><option>3 Personen</option>
+            <option>4 Personen</option><option>5–6 Personen</option><option>Gruppe (7+)</option>
+          </select>
+        </div>
+        <div class="ff"><label>Anlass</label>
+          <select name="anlass">
+            <option value="">Kein besonderer Anlass</option>
+            <option>🎂 Geburtstag</option><option>💍 Jubiläum</option>
+            <option>💼 Geschäftsessen</option><option>👨‍👩‍👧 Familienfeier</option>
+          </select>
+        </div>
+        <div class="ff full"><label>Besondere Wünsche</label>
+          <textarea name="wuensche" rows="3" placeholder="Allergien, Fenstertisch, Kinderstuhl..."></textarea>
+        </div>
+        <div class="ff full">
+          <button type="submit" class="btn btn-g" style="width:100%;justify-content:center;border-radius:1px;padding:15px" id="sbtn">
+            <span>Tisch verbindlich reservieren →</span>
+          </button>
+        </div>
+      </form>
+      <div class="fmsg" id="okMsg">✓ Vielen Dank! Wir melden uns in Kürze zur Bestätigung.</div>
+      <div class="fmsg" id="errMsg">✕ Fehler. Bitte rufen Sie uns an: +49 89 12345678</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="sec">
+  <div class="c-wrap">
+    <div class="s-label r">Finden Sie uns</div>
+    <h2 class="s-title r" data-d="1">Kontakt &<br><em>Anfahrt</em></h2>
+    <div class="c-grid">
+      <div class="cc r"><div class="cc-lbl">Adresse</div><div class="cc-val">Maximilianstraße 42<br>80538 München<br>U4/U5 Max-Weber-Platz</div></div>
+      <div class="cc r" data-d="1"><div class="cc-lbl">Öffnungszeiten</div><div class="cc-val">Di–Fr: 12:00–14:30 Uhr<br>Di–Fr: 18:00–23:00 Uhr<br>Sa–So: 12:00–23:00 Uhr<br>Montag: Ruhetag</div></div>
+      <div class="cc r" data-d="2"><div class="cc-lbl">Kontakt</div><div class="cc-val">+49 89 12345678<br>info@lastella-muenchen.de</div></div>
+      <div class="cc r" data-d="3"><div class="cc-lbl">Social Media</div><div class="cc-val">@lastella_muenchen<br>Instagram · Facebook<br>Google Maps ★ 4.9</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="f-logo">La Stella</span>
+  <span class="f-copy">© 2024 La Stella Ristorante · Maximilianstraße 42 · München</span>
+  <span class="f-copy">Impressum · Datenschutz</span>
+</footer>
+
+<script>
+// Loader
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loader').classList.add('out'),1700));
+
+// Cursor
+const c1=document.getElementById('c1'),c2=document.getElementById('c2');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function loop(){
+  c1.style.cssText=`left:${mx}px;top:${my}px`;
+  rx+=(mx-rx)*0.09;ry+=(my-ry)*0.09;
+  c2.style.cssText=`left:${rx}px;top:${ry}px`;
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button,input,select,textarea').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{c2.style.width='52px';c2.style.height='52px';c2.style.borderColor='rgba(196,154,60,.8)';});
+  el.addEventListener('mouseleave',()=>{c2.style.width='36px';c2.style.height='36px';c2.style.borderColor='rgba(196,154,60,.4)';});
+});
+
+// Nav
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',onScroll,{passive:true});
+
+// Scroll
+function go(id){const el=document.getElementById(id);if(!el)return;window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-70,behavior:'smooth'});}
+
+// Parallax — zoom in/out on scroll
+function onScroll(){
+  const sy=window.scrollY;
+  const wh=window.innerHeight;
+
+  nav.classList.toggle('s',sy>50);
+
+  // Hero zoom out as you scroll down
+  const heroImg=document.getElementById('heroImg');
+  if(heroImg){
+    const prog=Math.min(sy/wh,1);
+    heroImg.style.transform=`scale(${1.15-prog*0.1})`;
+  }
+
+  // Parallax breaks — zoom in as they come into view
+  ['pb1','pb2'].forEach(id=>{
+    const sec=document.getElementById(id);
+    const img=document.getElementById(id+'img');
+    if(!sec||!img)return;
+    const rect=sec.getBoundingClientRect();
+    const prog=1-(rect.top+rect.height)/(wh+rect.height);
+    // scale from 1.0 to 1.18 as section passes through viewport
+    const scale=1.04+prog*0.14;
+    const ty=(prog-0.5)*30;
+    img.style.transform=`scale(${scale}) translateY(${ty}px)`;
+  });
+
+  // Small images parallax zoom
+  document.querySelectorAll('.pz').forEach(img=>{
+    const rect=img.getBoundingClientRect();
+    const speed=parseFloat(img.dataset.speed||'0.04');
+    const center=(rect.top+rect.height/2)/wh;
+    const offset=(0.5-center)*speed*300;
+    img.style.transform=`scale(1.1) translateY(${offset}px)`;
+  });
+}
+
+window.addEventListener('scroll',onScroll,{passive:true});
+onScroll();
+
+// Tabs
+function switchTab(btn,name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.mpanel').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('mp-'+name).classList.add('on');
+}
+
+// Reveal
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*55);obs.unobserve(e.target);}});
+},{threshold:0.07,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+
+// Counter
+const cobs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const t=parseInt(e.target.dataset.target);
+      if(!t)return;
+      let cur=0;const step=t/55;
+      const iv=setInterval(()=>{cur=Math.min(cur+step,t);e.target.textContent=Math.round(cur);if(cur>=t)clearInterval(iv);},16);
+      cobs.unobserve(e.target);
+    }
+  });
+},{threshold:0.5});
+document.querySelectorAll('[data-target]').forEach(el=>cobs.observe(el));
+
+// Form
+const form=document.getElementById('resForm');
+const sbtn=document.getElementById('sbtn');
+form.addEventListener('submit',async e=>{
+  e.preventDefault();
+  sbtn.querySelector('span').textContent='Wird gesendet...';
+  sbtn.style.opacity='.6';sbtn.disabled=true;
+  try{
+    const res=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}});
+    if(res.ok){form.style.display='none';document.getElementById('okMsg').classList.add('ok');}
+    else throw new Error();
+  }catch{
+    sbtn.querySelector('span').textContent='Tisch verbindlich reservieren →';
+    sbtn.style.opacity='1';sbtn.disabled=false;
+    document.getElementById('errMsg').classList.add('err');
+  }
+});
+</script>
+</body>
+</html>
